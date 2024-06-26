@@ -1,8 +1,11 @@
 import React , { useState, useEffect } from 'react'
 import './App.css'
 
+type GameStatusValues = {
+  [key: number]: string;
+};
 
-const gameStatusValues = {
+const gameStatusValues: GameStatusValues = {
   1: "Winner!",
   2: "Game Over, try again"
 }
@@ -65,7 +68,7 @@ function App() {
           key={`${letter}-${index}`} 
           onClick={(e) => handleLetterSelect((e.target as HTMLButtonElement).value)} 
           value={letter}
-          className={`${correctGuesses.includes(letter) && 'letter-button-selected'} ${wrongGuesses.includes(letter) && 'letter-button-disabled'}`}
+          className={`${correctGuesses.includes(letter) && 'letter-button-selected'}`}
           disabled={wrongGuesses.includes(letter)}
           >
             {letter}
