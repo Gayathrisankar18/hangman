@@ -89,6 +89,11 @@
   visibility: visible;
 }
 
+.letter.gameOver {
+  visibility: visible;
+  color: red
+}
+
 .letter-button-selected {
   background-color: aqua;
 }
