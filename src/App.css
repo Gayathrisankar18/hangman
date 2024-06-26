@@ -1,0 +1,98 @@
+/* #root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+} */
+.main-container {
+  display: inline-block;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 200px;
+    height: 100px;
+    margin: auto;
+}
+.word-container {
+  display: flex;
+  column-gap: 15px;
+}
+.letter-buttons-container {
+  width: 300px;
+    display: flex;
+    flex-wrap: wrap;
+    row-gap: 5px;
+    column-gap: 5px;
+    margin-top: 15px;
+}
+.content-wrapper {
+  display: flex;
+  flex-direction: column;
+  /* width: 500px; */
+  justify-content: center;
+  align-items: center;
+}
+.horizontal-line {
+  margin-top: 5px;
+  height: 5px;
+  background-color: black;
+  width: 20px;
+}
+.letter-container{
+  display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.letter {
+  visibility: hidden;
+}
+
+.letter.selected {
+  visibility: visible;
+}
+
+.letter-button-selected {
+  background-color: aqua;
+}
+
+/* .letter-button-disabled {
+ 
+} */
