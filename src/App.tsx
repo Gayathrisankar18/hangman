@@ -16,6 +16,8 @@ function App() {
   const [correctGuesses, setCorrectGuesses] = useState<Array<string>>([]);
   const [wrongGuesses, setWrongGuesses] = useState<Array<string>>([]);
   const [gameStatus, setGameStatus] = useState<number | null>(null)
+  const [wordFetchStatus, setWordFetchStatus] = useState<string>('Loading...')
+
 
 
   useEffect( () => {
@@ -24,17 +26,24 @@ function App() {
     //   const decoded = await response.json() as string[]
     //   setWord(decoded[0].toUpperCase())
     // }
-    fetchWord()
+      fetchWord()
   }, [])
 
   const fetchWord = async () => {
+    try{
     const response = await fetch('https://random-word-api.herokuapp.com/word?length=5');
     const decoded = (await response.json()) as string[];
     setWord(decoded[0]?.toUpperCase() || '');
+    setWordFetchStatus('');
     setAvailableRetry(6);
     setCorrectGuesses([]);
     setWrongGuesses([]);
     setGameStatus(null);
+    }catch(e) {
+      if (e instanceof Error) {
+        setWordFetchStatus("Error in fetching word, " + e.message)
+      }
+    }
   };
 
   const handleLetterSelect = (letter: string): void => {
@@ -61,12 +70,13 @@ function App() {
       <div className='main-container'>
         {word?.length ? 
         <div className='content-wrapper'>
-            {gameStatus == 2 && <div><span>{gameStatusValues[gameStatus]}</span>
+            {gameStatus && 
+            <div><span>{gameStatusValues[gameStatus]}</span>
             <button onClick={fetchWord}>Restart</button></div>}
-          {gameStatus == 1 ? <div>
+          {/* {gameStatus == 1 ? <div>
             <span>{gameStatusValues[gameStatus]}</span>
             <button onClick={fetchWord}>Restart</button>
-            </div> : 
+            </div> :  */}
           <>
         <div className='word-container'>
         
@@ -85,14 +95,15 @@ function App() {
           onClick={(e) => handleLetterSelect((e.target as HTMLButtonElement).value)} 
           value={letter}
           className={`${correctGuesses.includes(letter) && 'letter-button-selected'}`}
-          disabled={wrongGuesses.includes(letter) || gameStatus === 2}
+          disabled={wrongGuesses.includes(letter) || !!gameStatus}
           >
             {letter}
           </button>
         })}
         </div>
-        </> }
-        </div>: <span>Loading....</span>}
+        </>
+         {/* } */}
+        </div>: <span>{wordFetchStatus}</span>}
         
       </div>
   )
