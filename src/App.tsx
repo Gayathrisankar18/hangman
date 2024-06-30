@@ -1,5 +1,7 @@
 import React , { useState, useEffect } from 'react'
 import './App.css'
+import HangingManDrawing from './HangingManDrawing';
+import words from './wordList.json'
 
 type GameStatusValues = {
   [key: number]: string;
@@ -11,40 +13,40 @@ const gameStatusValues: GameStatusValues = {
 }
 
 function App() {
-  const [word, setWord] = useState<string>('');
+  const [word, setWord] = useState<string>(() => {
+    return words[Math.floor(Math.random() * words.length)].toUpperCase()
+  });
   const [availableRetry, setAvailableRetry] = useState<number>(6);
   const [correctGuesses, setCorrectGuesses] = useState<Array<string>>([]);
   const [wrongGuesses, setWrongGuesses] = useState<Array<string>>([]);
   const [gameStatus, setGameStatus] = useState<number | null>(null)
-  const [wordFetchStatus, setWordFetchStatus] = useState<string>('Loading...')
+  // const [wordFetchStatus, setWordFetchStatus] = useState<string>('Loading...')
 
+  // useEffect( () => {
+  //   // const fetchWord = async() => {
+  //   //   const response = await fetch('https://random-word-api.herokuapp.com/word?length=5')
+  //   //   const decoded = await response.json() as string[]
+  //   //   setWord(decoded[0].toUpperCase())
+  //   // }
+  //     // fetchWord()
+  // }, [])
 
-
-  useEffect( () => {
-    // const fetchWord = async() => {
-    //   const response = await fetch('https://random-word-api.herokuapp.com/word?length=5')
-    //   const decoded = await response.json() as string[]
-    //   setWord(decoded[0].toUpperCase())
-    // }
-      fetchWord()
-  }, [])
-
-  const fetchWord = async () => {
-    try{
-    const response = await fetch('https://random-word-api.herokuapp.com/word?length=5');
-    const decoded = (await response.json()) as string[];
-    setWord(decoded[0]?.toUpperCase() || '');
-    setWordFetchStatus('');
-    setAvailableRetry(6);
-    setCorrectGuesses([]);
-    setWrongGuesses([]);
-    setGameStatus(null);
-    }catch(e) {
-      if (e instanceof Error) {
-        setWordFetchStatus("Error in fetching word, " + e.message)
-      }
-    }
-  };
+  // const fetchWord = async () => {
+  //   try{
+  //   const response = await fetch('https://random-word-api.herokuapp.com/word?length=5');
+  //   const decoded = (await response.json()) as string[];
+  //   setWord(decoded[0]?.toUpperCase() || '');
+  //   setWordFetchStatus('');
+  //   setAvailableRetry(6);
+  //   setCorrectGuesses([]);
+  //   setWrongGuesses([]);
+  //   setGameStatus(null);
+  //   }catch(e) {
+  //     if (e instanceof Error) {
+  //       setWordFetchStatus("Error in fetching word, " + e.message)
+  //     }
+  //   }
+  // };
 
   const handleLetterSelect = (letter: string): void => {
     if(!correctGuesses.includes(letter) && word.includes(letter)) {
@@ -68,21 +70,20 @@ function App() {
 
   return (
       <div className='main-container'>
+         {gameStatus && 
+            <div className='game-status-message-container'><span>{gameStatusValues[gameStatus]}</span>
+            <button onClick={() => window.location.reload()}>Restart</button></div>}
         {word?.length ? 
         <div className='content-wrapper'>
-            {gameStatus && 
-            <div><span>{gameStatusValues[gameStatus]}</span>
-            <button onClick={fetchWord}>Restart</button></div>}
-          {/* {gameStatus == 1 ? <div>
-            <span>{gameStatusValues[gameStatus]}</span>
-            <button onClick={fetchWord}>Restart</button>
-            </div> :  */}
+           
+            <HangingManDrawing availableRetry={availableRetry}/>
+          
           <>
         <div className='word-container'>
         
           {word.split('').map((letter, index) => {
             return <div key={index} className='letter-container'>
-              <span className={`letter ${correctGuesses.includes(letter) ? 'selected' : ''} ${gameStatus === 2 ? 'gameOver': ''}`}>{letter}</span>
+              <span className={`letter ${correctGuesses.includes(letter) ? 'selected' : ''} ${(gameStatus === 2 && !correctGuesses.includes(letter)) ? 'gameOver': ''}`}>{letter}</span>
               <hr className='horizontal-line'/>
               </div>
           })}
@@ -94,7 +95,7 @@ function App() {
           key={`${letter}-${index}`} 
           onClick={(e) => handleLetterSelect((e.target as HTMLButtonElement).value)} 
           value={letter}
-          className={`${correctGuesses.includes(letter) && 'letter-button-selected'}`}
+          className={`${correctGuesses.includes(letter) && 'letter-button-selected'} letter-button`}
           disabled={wrongGuesses.includes(letter) || !!gameStatus}
           >
             {letter}
