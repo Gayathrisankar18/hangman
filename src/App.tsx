@@ -20,11 +20,12 @@ function App() {
   const [correctGuesses, setCorrectGuesses] = useState<Array<string>>([]);
   const [wrongGuesses, setWrongGuesses] = useState<Array<string>>([]);
   const [gameStatus, setGameStatus] = useState<number | null>(null)
+  const [time,setTime] = useState<number>(0)
   // const [wordFetchStatus, setWordFetchStatus] = useState<string>('Loading...')
 
   // useEffect( () => {
   //   // const fetchWord = async() => {
-  //   //   const response = await fetch('https://random-word-api.herokuapp.com/word?length=5')
+  //   //   const response = await fetch('https://random-word-api.herokuapp.com/word?length=20')
   //   //   const decoded = await response.json() as string[]
   //   //   setWord(decoded[0].toUpperCase())
   //   // }
@@ -33,7 +34,7 @@ function App() {
 
   // const fetchWord = async () => {
   //   try{
-  //   const response = await fetch('https://random-word-api.herokuapp.com/word?length=5');
+  //   const response = await fetch('https://random-word-api.herokuapp.com/word?length=20');
   //   const decoded = (await response.json()) as string[];
   //   setWord(decoded[0]?.toUpperCase() || '');
   //   setWordFetchStatus('');
@@ -68,6 +69,28 @@ function App() {
     }
   }, [correctGuesses, word])
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if(gameStatus === null) {
+        setGameStatus(2)
+      }
+    }, 1000 * 20)
+    return () => clearTimeout(timer)
+  }, [gameStatus])
+
+  useEffect(() => {
+    let timer: number = 0
+    if(gameStatus) {
+      clearTimeout(timer)
+      setTime(0)
+    }else {
+      timer = setTimeout(() => {
+        setTime((time) => time+1)
+      }, 1000)
+    }
+    return () => clearTimeout(timer)
+  }, [time, gameStatus])
+
   return (
       <div className='main-container'>
          {gameStatus && 
@@ -75,6 +98,7 @@ function App() {
             <button onClick={() => window.location.reload()}>Restart</button></div>}
         {word?.length ? 
         <div className='content-wrapper'>
+            <div>Time : {time}</div>
            
             <HangingManDrawing availableRetry={availableRetry}/>
           

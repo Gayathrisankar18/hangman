@@ -56,11 +56,11 @@
   column-gap: 15px;
 }
 .letter-buttons-container {
-  width: 400px;
+  width: 780px;
     display: flex;
     flex-wrap: wrap;
-    row-gap: 5px;
-    column-gap: 5px;
+    row-gap: 10px;
+    column-gap: 10px;
     margin-top: 15px;
 }
 .content-wrapper {
@@ -98,12 +98,17 @@
 }
 
 .letter-button-selected {
-  background-color: aqua;
+  background-color: hsl(200, 100%, 50%);
+  color: white;
 }
 
 .letter-button {
-  width: 40px;
-  height: 40px;
+  width: 75px;
+  height: 75px;
+}
+
+.letter-button:hover:not(:disabled) {
+  background-color: hsl(200, 100%, 75%);
 }
 
 .game-status-message-container {
