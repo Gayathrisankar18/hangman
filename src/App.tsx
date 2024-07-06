@@ -127,9 +127,7 @@ function App() {
         })}
         </div>
         </>
-         {/* } */}
         </div>: <span>{wordFetchStatus}</span>}
-        
       </div>
   )
 }
